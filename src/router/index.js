@@ -6,6 +6,13 @@ import _ from "lodash";
 /*
 router: {
   // 基本路由
+  // 文件树如下：
+  pages/
+  --| user/
+  -----| index.vue
+  -----| one.vue
+  --| index.vue
+  会自动生成：
   routes: [
     {
       name: 'index',
@@ -23,6 +30,38 @@ router: {
       component: 'pages/user/one.vue'
     }
   ]
+  // 动态路由
+  // 文件树如下：
+  pages/
+  --| _slug/
+  -----| comments.vue
+  -----| index.vue
+  --| user/
+  -----| _id.vue
+  --| index.vue
+  会自动生成：
+  routes: [
+    {
+      name: 'index',
+      path: '/',
+      component: 'pages/index.vue'
+    },
+    {
+      name: 'users-id',
+      path: '/users/:id?',
+      component: 'pages/users/_id.vue'
+    },
+    {
+      name: 'slug',
+      path: '/:slug',
+      component: 'pages/_slug/index.vue'
+    },
+    {
+      name: 'slug-comments',
+      path: '/:slug/comments',
+      component: 'pages/_slug/comments.vue'
+    }
+  ]
 }
  */
 
@@ -30,22 +69,31 @@ const relativePath = require.context("../views", true, /\.vue$/).keys();
 
 const routerArr = [];
 relativePath.forEach((item) => {
+  let path, name, component;
   // 去除后缀
   item = item.replace(".vue", "");
   // 根据
-  let paths = item.match(/[a-zA-Z0-9]+/g); // paths中存储了一个目录、二级目录、*目录
-  paths = paths.map((item) => _.lowerFirst(item));
+  let pathArr = item.match(/[_a-zA-Z0-9]+/g); // pathArr中存储了一个目录、二级目录、*目录
 
-  let path = paths.join("/");
+  // 全部转化为小写
+  pathArr = pathArr.map((item) => _.lowerFirst(item));
+
+  path = pathArr.join("/");
   path = "/" + path;
+  // 如果包含_，就是动态的路由。把 _ 替换为 :
+  if (path.includes("_")) {
+    path = path.replace("_", ":");
+  }
 
-  let name = paths.map((item) => _.upperFirst(item));
-  name = name.join("");
+  name = pathArr.map((item) => item.replace("_", ""));
+  name = name.join("-");
+
+  component = pathArr.join("/");
 
   const routerChild = {
     path,
     name,
-    component: () => import(`../views${path}.vue`),
+    component: () => import(`../views/${component}.vue`),
   };
   routerArr.push(routerChild);
 });
