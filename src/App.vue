@@ -1,10 +1,24 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <p v-for="(item, index) in routes" :key="index">
+      <router-link :to="item.path">{{ item.name }}</router-link>
+    </p>
   </div>
   <router-view />
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      routes: [],
+    };
+  },
+  created() {
+    this.routes = this.$router.options.routes;
+  },
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -17,6 +31,13 @@
 
 #nav {
   padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    margin: 0 10px;
+  }
 
   a {
     font-weight: bold;
