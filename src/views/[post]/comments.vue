@@ -1,10 +1,10 @@
 <template>
-  <div>user-_id</div>
+  <div>动态可选路由-参数在路由中间传递</div>
 </template>
 
 <script>
 export default {
-  name: "_id",
+  name: "comments",
 };
 </script>
 

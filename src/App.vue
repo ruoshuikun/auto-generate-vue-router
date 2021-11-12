@@ -15,7 +15,14 @@ export default {
     };
   },
   created() {
-    this.routes = this.$router.options.routes;
+    let routes = this.$router.options.routes;
+    routes.map((item) => {
+      item.path = item.path.replace(":name?", "parameter");
+      item.path = item.path.replace(":post", "post");
+      item.path = item.path.replace(":id?", "");
+      item.path = item.path.replace(":cid", "123");
+    });
+    this.routes = routes;
   },
 };
 </script>

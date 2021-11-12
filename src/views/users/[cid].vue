@@ -1,10 +1,10 @@
 <template>
-  <div>_slug-index</div>
+  <div>动态路由</div>
 </template>
 
 <script>
 export default {
-  name: "index",
+  name: "_id",
 };
 </script>
 

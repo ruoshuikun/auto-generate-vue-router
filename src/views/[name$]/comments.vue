@@ -1,5 +1,5 @@
 <template>
-  <div>_slug-comments</div>
+  <div>[name$] comments</div>
 </template>
 
 <script>
